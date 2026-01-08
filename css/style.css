@@ -224,6 +224,7 @@ a:hover {
 
 .header__main {
     padding: var(--space-md) 0;
+    background: var(--color-white);
 }
 
 .header__main-content {
@@ -375,7 +376,7 @@ a:hover {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 140px;
+    padding-top: 220px;
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     overflow: hidden;
 }
