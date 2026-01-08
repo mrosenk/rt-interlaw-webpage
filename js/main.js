@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initDropdownNav();
     initContactForm();
     initAnimateOnScroll();
+    initUrlaubsBanner();
 });
 
 /**
@@ -343,3 +344,126 @@ function switchLanguage(lang) {
 
 // Export for use in onclick handlers
 window.switchLanguage = switchLanguage;
+
+/**
+ * Urlaubs-Banner
+ * Zeigt einen Banner an, wenn in einstellungen.js aktiviert
+ */
+function initUrlaubsBanner() {
+    // Prüfen ob Einstellungen geladen sind
+    if (typeof WEBSITE_EINSTELLUNGEN === 'undefined') return;
+
+    const settings = WEBSITE_EINSTELLUNGEN.urlaubsBanner;
+
+    // Prüfen ob Banner aktiv ist
+    if (!settings || !settings.aktiv) return;
+
+    // Nur auf Startseiten anzeigen (index.html)
+    const isStartseite = window.location.pathname.endsWith('index.html') ||
+                         window.location.pathname.endsWith('/de/') ||
+                         window.location.pathname.endsWith('/cs/') ||
+                         window.location.pathname === '/';
+
+    if (!isStartseite) return;
+
+    // Datum formatieren
+    const lang = getCurrentLanguage();
+    const vonDatum = formatDatum(settings.vonDatum, lang);
+    const bisDatum = formatDatum(settings.bisDatum, lang);
+
+    // Nachricht je nach Sprache
+    let nachricht = lang === 'cs' ? settings.nachrichtCZ : settings.nachrichtDE;
+    nachricht = nachricht.replace('{von}', vonDatum).replace('{bis}', bisDatum);
+
+    // Banner erstellen
+    const banner = document.createElement('div');
+    banner.className = 'urlaubs-banner';
+    banner.innerHTML = `
+        <div class="container">
+            <div class="urlaubs-banner__content">
+                <svg class="urlaubs-banner__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span class="urlaubs-banner__text">${nachricht}</span>
+                <button class="urlaubs-banner__close" aria-label="Schließen">&times;</button>
+            </div>
+        </div>
+    `;
+
+    // Banner Styles
+    banner.style.cssText = `
+        background: linear-gradient(135deg, #c9a227 0%, #a88720 100%);
+        color: #1a365d;
+        padding: 0.75rem 0;
+        position: relative;
+        z-index: 1001;
+        font-size: 0.9rem;
+        font-weight: 500;
+    `;
+
+    const content = banner.querySelector('.urlaubs-banner__content');
+    content.style.cssText = `
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        text-align: center;
+    `;
+
+    const icon = banner.querySelector('.urlaubs-banner__icon');
+    icon.style.cssText = `
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    `;
+
+    const closeBtn = banner.querySelector('.urlaubs-banner__close');
+    closeBtn.style.cssText = `
+        background: none;
+        border: none;
+        color: #1a365d;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0 0.5rem;
+        line-height: 1;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    `;
+
+    closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
+    closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.7');
+    closeBtn.addEventListener('click', () => {
+        banner.remove();
+        // Optional: Im SessionStorage speichern, dass Banner geschlossen wurde
+        sessionStorage.setItem('urlaubsBannerClosed', 'true');
+    });
+
+    // Prüfen ob Banner bereits geschlossen wurde
+    if (sessionStorage.getItem('urlaubsBannerClosed') === 'true') return;
+
+    // Banner am Anfang des Body einfügen
+    document.body.insertBefore(banner, document.body.firstChild);
+
+    // Header-Position anpassen
+    const header = document.querySelector('.header');
+    if (header) {
+        const bannerHeight = banner.offsetHeight;
+        header.style.top = bannerHeight + 'px';
+    }
+}
+
+/**
+ * Datum formatieren
+ */
+function formatDatum(dateString, lang) {
+    const date = new Date(dateString);
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+
+    if (lang === 'cs') {
+        return date.toLocaleDateString('cs-CZ', options);
+    }
+    return date.toLocaleDateString('de-DE', options);
+}
