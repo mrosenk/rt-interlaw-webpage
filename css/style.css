@@ -5,23 +5,23 @@
 
 /* CSS Variables - Design System */
 :root {
-    /* Primary Colors - Elegant Navy & Gold */
-    --color-primary: #1a365d;
-    --color-primary-dark: #0f2442;
-    --color-primary-light: #2c5282;
+    /* Primary Colors - Elegant Red (wie Original RT-Interlaw) */
+    --color-primary: #b22234;
+    --color-primary-dark: #8b1a28;
+    --color-primary-light: #d43d4f;
 
-    /* Accent Colors - Professional Gold */
-    --color-accent: #c9a227;
-    --color-accent-light: #e0b830;
-    --color-accent-dark: #a88720;
+    /* Accent Colors - Professional Gray */
+    --color-accent: #7a7a7a;
+    --color-accent-light: #9a9a9a;
+    --color-accent-dark: #5a5a5a;
 
     /* Neutral Colors */
     --color-white: #ffffff;
-    --color-off-white: #f8f9fa;
-    --color-light-gray: #e9ecef;
-    --color-gray: #6c757d;
-    --color-dark-gray: #343a40;
-    --color-black: #1a1a1a;
+    --color-off-white: #fafafa;
+    --color-light-gray: #f0f0f0;
+    --color-gray: #7a7a7a;
+    --color-dark-gray: #4a4a4a;
+    --color-black: #2a2a2a;
 
     /* Semantic Colors */
     --color-success: #28a745;
@@ -377,7 +377,7 @@ a:hover {
     display: flex;
     align-items: center;
     padding-top: 220px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    background: var(--color-white);
     overflow: hidden;
 }
 
@@ -388,7 +388,7 @@ a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.03)"/></svg>');
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(0,0,0,0.02)"/></svg>');
     background-size: 50px 50px;
 }
 
@@ -402,7 +402,7 @@ a:hover {
 }
 
 .hero__text {
-    color: var(--color-white);
+    color: var(--color-dark-gray);
 }
 
 .hero__badge {
@@ -410,30 +410,31 @@ a:hover {
     align-items: center;
     gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(178, 34, 52, 0.1);
     border-radius: var(--radius-full);
     font-size: var(--text-sm);
     font-weight: 500;
     margin-bottom: var(--space-lg);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(178, 34, 52, 0.2);
+    color: var(--color-primary);
 }
 
 .hero__badge-icon {
     width: 20px;
     height: 20px;
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .hero__title {
     font-size: var(--text-6xl);
     font-weight: 700;
-    color: var(--color-white);
+    color: var(--color-dark-gray);
     margin-bottom: var(--space-lg);
     line-height: 1.1;
 }
 
 .hero__title-accent {
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .hero__description {
@@ -454,7 +455,7 @@ a:hover {
     gap: var(--space-2xl);
     margin-top: var(--space-3xl);
     padding-top: var(--space-2xl);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid var(--color-light-gray);
 }
 
 .hero__stat {
@@ -466,12 +467,12 @@ a:hover {
     font-family: var(--font-primary);
     font-size: var(--text-4xl);
     font-weight: 700;
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .hero__stat-label {
     font-size: var(--text-sm);
-    opacity: 0.8;
+    color: var(--color-gray);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -1336,6 +1337,26 @@ a:hover {
         flex-direction: column;
         align-items: center;
     }
+
+    /* Page Hero auf Unterseiten - mehr Abstand zum Header */
+    .page-hero {
+        padding-top: 160px;
+    }
+
+    /* Info-Karten Grid auf mobile umstellen */
+    .info-grid-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Content Grid auf mobile */
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* About Grid auf mobile */
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1394,8 +1415,9 @@ a:hover {
 /* Practice Area Detail Pages */
 .page-hero {
     padding: 180px 0 80px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: var(--color-white);
+    background: var(--color-off-white);
+    color: var(--color-dark-gray);
+    border-bottom: 1px solid var(--color-light-gray);
 }
 
 .page-hero__breadcrumb {
@@ -1404,25 +1426,29 @@ a:hover {
     gap: var(--space-sm);
     margin-bottom: var(--space-lg);
     font-size: var(--text-sm);
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 .page-hero__breadcrumb a {
-    color: var(--color-white);
+    color: var(--color-gray);
+}
+
+.page-hero__breadcrumb a:hover {
+    color: var(--color-primary);
 }
 
 .page-hero__breadcrumb span {
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .page-hero__title {
-    color: var(--color-white);
+    color: var(--color-dark-gray);
     margin-bottom: var(--space-md);
 }
 
 .page-hero__description {
     font-size: var(--text-xl);
-    opacity: 0.9;
+    color: var(--color-gray);
     max-width: 700px;
 }
 
