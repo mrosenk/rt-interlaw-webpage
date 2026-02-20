@@ -2,19 +2,19 @@
  * Contentful Integration - Kanzlei Rosenkranz-Tittl
  * Lädt Urlaubs-Banner und Blog-Artikel aus Contentful.
  *
- * Content Delivery API (read-only, öffentlich) — kein Secret im Frontend.
+ * Kein Token im Frontend — Anfragen gehen über /api/contentful (Vercel Serverless Function).
+ * Der Access Token liegt sicher als Vercel Environment Variable.
  */
-
-const CONTENTFUL_SPACE_ID  = 'c3w4lxf5mhpv';
-const CONTENTFUL_ACCESS_TOKEN = 'EJA4jvVzgJZaChIdhtHWWbECJb0xsEj-t8nOPlyhNJ8';
-const CONTENTFUL_API_BASE  = `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/master`;
 
 // ─────────────────────────────────────────────
 // Hilfsfunktionen
 // ─────────────────────────────────────────────
 
 async function contentfulFetch(endpoint) {
-    const url = `${CONTENTFUL_API_BASE}${endpoint}&access_token=${CONTENTFUL_ACCESS_TOKEN}`;
+    // endpoint z.B. '/entries?content_type=urlaubsBanner&limit=1&'
+    const [pathPart, queryPart] = endpoint.replace(/^\//, '').split('?');
+    const cleanQuery = (queryPart || '').replace(/&$/, '');
+    const url = `/api/contentful?path=${pathPart}&${cleanQuery}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Contentful API Fehler: ${res.status}`);
     return res.json();
