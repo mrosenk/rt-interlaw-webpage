@@ -124,76 +124,62 @@ async function loadUrlaubsBanner() {
 
 function renderUrlaubsBanner(nachricht) {
     const banner = document.createElement('div');
-    banner.className = 'urlaubs-banner';
+    banner.id = 'urlaubs-banner';
     banner.setAttribute('role', 'alert');
     banner.innerHTML = `
         <div class="container">
-            <div class="urlaubs-banner__content">
-                <svg class="urlaubs-banner__icon" xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     aria-hidden="true">
+            <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;flex-wrap:wrap;text-align:center;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" aria-hidden="true"
+                     style="width:20px;height:20px;flex-shrink:0;">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="8" x2="12" y2="12"></line>
                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                 </svg>
-                <span class="urlaubs-banner__text">${nachricht}</span>
-                <button class="urlaubs-banner__close" aria-label="Schließen">&times;</button>
+                <span>${nachricht}</span>
+                <button id="urlaubs-banner-close" aria-label="Schließen"
+                        style="background:none;border:none;color:#1a365d;font-size:1.5rem;cursor:pointer;padding:0 0.5rem;line-height:1;opacity:0.7;">&times;</button>
             </div>
         </div>
     `;
 
+    // Position fixed — zuverlässig über dem fixed Header (z-index 1000)
     banner.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 2000;
         background: linear-gradient(135deg, #c9a227 0%, #a88720 100%);
         color: #1a365d;
         padding: 0.75rem 0;
-        position: relative;
-        z-index: 1001;
         font-size: 0.9rem;
         font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     `;
 
-    const content = banner.querySelector('.urlaubs-banner__content');
-    content.style.cssText = `
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        text-align: center;
-    `;
+    // Spacer hält den Platz für den fixed Banner frei
+    const spacer = document.createElement('div');
+    spacer.id = 'urlaubs-banner-spacer';
 
-    const icon = banner.querySelector('.urlaubs-banner__icon');
-    icon.style.cssText = 'width: 20px; height: 20px; flex-shrink: 0;';
+    document.body.insertBefore(spacer, document.body.firstChild);
+    document.body.insertBefore(banner, spacer);
 
-    const closeBtn = banner.querySelector('.urlaubs-banner__close');
-    closeBtn.style.cssText = `
-        background: none;
-        border: none;
-        color: #1a365d;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0 0.5rem;
-        line-height: 1;
-        opacity: 0.7;
-        transition: opacity 0.2s;
-    `;
-    closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
-    closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.7');
-    closeBtn.addEventListener('click', () => {
+    // Nach dem Rendern: Header und Spacer anpassen
+    requestAnimationFrame(() => {
+        const h = banner.offsetHeight || 48;
+        spacer.style.height = h + 'px';
+        const header = document.querySelector('.header');
+        if (header) header.style.top = h + 'px';
+    });
+
+    document.getElementById('urlaubs-banner-close').addEventListener('click', () => {
         banner.remove();
+        spacer.remove();
         sessionStorage.setItem('urlaubsBannerClosed', 'true');
         const header = document.querySelector('.header');
         if (header) header.style.top = '';
     });
-
-    document.body.insertBefore(banner, document.body.firstChild);
-
-    const header = document.querySelector('.header');
-    if (header) {
-        requestAnimationFrame(() => {
-            header.style.top = banner.offsetHeight + 'px';
-        });
-    }
 }
 
 // ─────────────────────────────────────────────
