@@ -178,6 +178,9 @@
                                 <a href="podnikatele.html" class="nav__link">Podnikatelé</a>
                             </li>
                             <li class="nav__item">
+                                <a href="blog.html" class="nav__link">Blog</a>
+                            </li>
+                            <li class="nav__item">
                                 <a href="kontakt.html" class="nav__link">Kontakt</a>
                             </li>
                         </ul>
@@ -468,6 +471,26 @@
         </div>
     </section>
 
+    <!-- Blog Vorschau -->
+    <section class="section blog-vorschau-section">
+        <div class="container">
+            <div class="section__header">
+                <span class="section__badge">Aktuality</span>
+                <h2 class="section__title">Blog & Právní tipy</h2>
+                <p class="section__subtitle">Praktické informace o německo-českých právních otázkách</p>
+            </div>
+            <div id="blog-vorschau" class="blog-grid">
+                <!-- Wird per contentful.js befüllt -->
+            </div>
+            <div class="blog-vorschau__mehr">
+                <a href="blog.html" class="btn btn--outline">
+                    Číst všechny články
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta">
         <div class="container">
@@ -661,7 +684,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="../js/einstellungen.js"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/contentful.js"></script>
 </body>
 </html>
